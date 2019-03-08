@@ -34,7 +34,7 @@ pub trait With {
         f(self)
     }
 
-    /// Returns the receiver if the given function returns [`Ok`], else forwards the [`Err`].
+    /// Returns the receiver if the given function returns `Ok`, else forwards the `Err`.
     /// Akin to Kotlin's [takeIf](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/take-if.html)
     /// extension function
     /// # Examples
