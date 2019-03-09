@@ -1,8 +1,11 @@
+#![feature(try_trait)]
 #![warn(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![cfg_attr(test, deny(warnings))]
 
 //! An approximation of Kotlin's chaining functions like [let](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/let.html) and [also](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/also.html)
+
+use std::ops::Try;
 
 /// Provides Kotlin-esque helper functions for all types via a blanket impl, enabling easier function chaining patterns
 /// ```
@@ -70,6 +73,48 @@ pub trait With {
     {
         f(&mut self);
         self
+    }
+
+    /// Calls a function with the `Ok` contained value and returns the `Result`.
+    /// # Examples
+    /// ```
+    /// # use with::*;
+    /// let x: Result<String, ()> = Ok("Hello".to_string()).and_run(|s| s.push('!'));
+    /// assert_eq!(Ok("Hello!".to_string()), x);
+    /// ```
+    #[inline(always)]
+    fn and_run<R, E, T>(self, f: impl FnOnce(&mut R) -> T) -> Self
+    where
+        Self: Try<Ok = R, Error = E> + Sized,
+    {
+        match Try::into_result(self) {
+            Ok(mut r) => {
+                f(&mut r);
+                Try::from_ok(r)
+            }
+            Err(e) => Try::from_error(e),
+        }
+    }
+
+    /// Calls a function with the `Err` contained value and returns the `Result`.
+    /// # Examples
+    /// ```
+    /// # use with::*;
+    /// let x: Result<(), String> = Err("Hello".to_string()).or_run(|s| s.push('!'));
+    /// assert_eq!(Err("Hello!".to_string()), x);
+    /// ```
+    #[inline(always)]
+    fn or_run<R, E, T>(self, f: impl FnOnce(&mut E) -> T) -> Self
+    where
+        Self: Try<Ok = R, Error = E> + Sized,
+    {
+        match Try::into_result(self) {
+            Ok(r) => Try::from_ok(r),
+            Err(mut e) => {
+                f(&mut e);
+                Try::from_error(e)
+            }
+        }
     }
 }
 
