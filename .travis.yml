@@ -1,4 +1,16 @@
 language: rust
+
 script:
-    - cargo build --verbose --all
-    - cargo test --verbose --all
+  - cargo build --verbose --all
+  - cargo test --verbose --all
+
+cache:
+  - cargo
+
+matrix:
+  include:
+    - rust: stable
+    - rust: nightly
+      script:
+          - cargo build --verbose --features "nightly"
+          - cargo test --verbose --features "nightly"

@@ -1,10 +1,38 @@
-#![feature(try_trait)]
+#![cfg_attr(feature = "nightly", feature(try_trait))]
 #![warn(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![cfg_attr(test, deny(warnings))]
 
+//! <style>
+//! /* Provides formatting for the feature list */
+//! .desc {
+//!     padding-left: 1em;
+//!     margin-bottom: 1em;
+//!     display: block;
+//! }
+//! .icon {
+//!   width: 1em;
+//!   height: 1em;
+//!   display: inline-flex;
+//!   top: .125em;
+//!   position: relative;
+//! }
+//! .check-mark {
+//!   background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='3.8 5 16.8 16.8' width='100%' height='100%'><path d='M9 16.2l-3.5-3.5c-.39-.39-1.01-.39-1.4 0-.39.39-.39 1.01 0 1.4l4.19 4.19c.39.39 1.02.39 1.41 0L20.3 7.7c.39-.39.39-1.01 0-1.4-.39-.39-1.01-.39-1.4 0L9 16.2' fill='green' /></svg>") no-repeat;
+//! }
+//! .cross-mark {
+//!   background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='3.5 3.5 16.8 16.8' width='100%' height='100%'><path d='M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z' fill='red' /></svg>");
+//! }
+//! </style>
+//!
 //! An approximation of Kotlin's chaining functions like [let](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/let.html) and [also](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/also.html)
+//! # Features
+//! - nightly
+#![cfg_attr(feature = "nightly", doc = r#"<i class="check-mark icon" /></i>"#)]
+#![cfg_attr(not(feature = "nightly"), doc = r#"<i class="cross-mark icon" /></i>"#)]
+//! <span class="desc">Additional features requiring the nightly compiler</span>
 
+#[cfg(feature = "nightly")]
 use std::ops::Try;
 
 /// Provides Kotlin-esque helper functions for all types via a blanket impl, enabling easier function chaining patterns
@@ -83,6 +111,7 @@ pub trait With {
     /// assert_eq!(Ok("Hello!".to_string()), x);
     /// ```
     #[inline(always)]
+    #[cfg(feature = "nightly")]
     fn and_run<R, E, T>(self, f: impl FnOnce(&mut R) -> T) -> Self
     where
         Self: Try<Ok = R, Error = E> + Sized,
@@ -104,6 +133,7 @@ pub trait With {
     /// assert_eq!(Err("Hello!".to_string()), x);
     /// ```
     #[inline(always)]
+    #[cfg(feature = "nightly")]
     fn or_run<R, E, T>(self, f: impl FnOnce(&mut E) -> T) -> Self
     where
         Self: Try<Ok = R, Error = E> + Sized,
