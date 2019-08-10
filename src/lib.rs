@@ -38,17 +38,17 @@ use std::ops::Try;
 
 /// Provides Kotlin-esque helper functions for all types via a blanket impl, enabling easier function chaining patterns
 /// ```
-/// # use with::*;
+/// # use also::*;
 /// let not_empty = ().lets(|_| "Hello, world!");
 /// assert_eq!("Hello, world!", not_empty);
 /// ```
-pub trait With {
+pub trait Also {
     /// Calls a function with the receiver, and returns the result.
     /// Akin to Kotlin's [let](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/let.html)
     /// extension function
     /// # Examples
     /// ```
-    /// # use with::*;
+    /// # use also::*;
     /// let x = "Hello, world!".lets(|x| x.len());
     /// assert_eq!(13, x);
     ///
@@ -71,7 +71,7 @@ pub trait With {
     /// extension function
     /// # Examples
     /// ```
-    /// # use with::*;
+    /// # use also::*;
     /// let x = "42".take_if(|x| u8::from_str_radix(x, 10));
     /// assert_eq!(Ok("42"), x);
     ///
@@ -91,7 +91,7 @@ pub trait With {
     /// extension function
     /// # Examples
     /// ```
-    /// # use with::*;
+    /// # use also::*;
     /// let x = "Hello".to_string().also(|x| x.push_str(", world!"));
     /// assert_eq!("Hello, world!", x);
     /// ```
@@ -107,7 +107,7 @@ pub trait With {
     /// Calls a function with the `Ok` contained value and returns the `Result`.
     /// # Examples
     /// ```
-    /// # use with::*;
+    /// # use also::*;
     /// let x: Result<String, ()> = Ok("Hello".to_string()).and_run(|s| s.push('!'));
     /// assert_eq!(Ok("Hello!".to_string()), x);
     /// ```
@@ -129,7 +129,7 @@ pub trait With {
     /// Calls a function with the `Err` contained value and returns the `Result`.
     /// # Examples
     /// ```
-    /// # use with::*;
+    /// # use also::*;
     /// let x: Result<(), String> = Err("Hello".to_string()).or_run(|s| s.push('!'));
     /// assert_eq!(Err("Hello!".to_string()), x);
     /// ```
@@ -149,4 +149,4 @@ pub trait With {
     }
 }
 
-impl<T> With for T {}
+impl<T> Also for T {}
