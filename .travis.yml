@@ -22,3 +22,5 @@ matrix:
   exclude:
     - rust: stable
       env: FEATURES='all'
+    - rust: beta
+      env: FEATURES='all'
