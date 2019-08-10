@@ -10,6 +10,7 @@ repository = "https://github.com/dlo9/also"
 version = "0.1.0"
 
 [features]
+all = ["nightly", "std"]
 default = ["std"]
 nightly = []
 std = []
