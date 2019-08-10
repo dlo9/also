@@ -1,17 +1,13 @@
 [package]
-name = "with"
-version = "0.1.0"
 authors = ["David <if_coding@fastmail.com>"]
-edition = "2018"
-
-description = "A collection of Kotlin-esque blanket impl helper functions, enabling easier function chaining patterns."
-repository = "https://github.com/dlo9/with"
-readme = "README.md"
 categories = ["rust-patterns", "no-std"]
+description = "A collection of Kotlin-esque blanket impl helper functions, enabling easier function chaining patterns."
+edition = "2018"
 keywords = ["kotlin", "scope", "ergonomics"]
 license = "MIT"
+name = "with"
+repository = "https://github.com/dlo9/with"
+version = "0.1.0"
 
 [features]
 nightly = []
-
-[dependencies]
