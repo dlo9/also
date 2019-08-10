@@ -1,5 +1,5 @@
-#![no_std]
-#![cfg_attr(feature = "nightly", feature(try_trait))]
+#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(all(feature = "nightly", feature = "std"), feature(try_trait))]
 #![warn(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![cfg_attr(test, deny(warnings))]
@@ -32,8 +32,12 @@
 #![cfg_attr(feature = "nightly", doc = r#"<i class="check-mark icon" /></i>"#)]
 #![cfg_attr(not(feature = "nightly"), doc = r#"<i class="cross-mark icon" /></i>"#)]
 //! <span class="desc">Additional features requiring the nightly compiler</span>
+//! - std
+#![cfg_attr(feature = "std", doc = r#"<i class="check-mark icon" /></i>"#)]
+#![cfg_attr(not(feature = "std"), doc = r#"<i class="cross-mark icon" /></i>"#)]
+//! <span class="desc">Additional features requiring the Rust Standard Library</span>
 
-#[cfg(feature = "nightly")]
+#[cfg(all(feature = "nightly", feature = "std"))]
 use std::ops::Try;
 
 /// Provides Kotlin-esque helper functions for all types via a blanket impl, enabling easier function chaining patterns
@@ -112,7 +116,7 @@ pub trait Also {
     /// assert_eq!(Ok("Hello!".to_string()), x);
     /// ```
     #[inline(always)]
-    #[cfg(feature = "nightly")]
+    #[cfg(all(feature = "nightly", feature = "std"))]
     fn and_run<R, E, T>(self, f: impl FnOnce(&mut R) -> T) -> Self
     where
         Self: Try<Ok = R, Error = E> + Sized,
@@ -134,7 +138,7 @@ pub trait Also {
     /// assert_eq!(Err("Hello!".to_string()), x);
     /// ```
     #[inline(always)]
-    #[cfg(feature = "nightly")]
+    #[cfg(all(feature = "nightly", feature = "std"))]
     fn or_run<R, E, T>(self, f: impl FnOnce(&mut E) -> T) -> Self
     where
         Self: Try<Ok = R, Error = E> + Sized,
