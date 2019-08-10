@@ -1,16 +1,24 @@
 language: rust
 
+rust:
+  - nightly
+  - beta
+  - stable
+
+env:
+  matrix:
+    - FEATURES=''
+    - FEATURES='default'
+    - FEATURES='all'
+
 script:
-  - cargo build --verbose --all
-  - cargo test --verbose --all
+  - cargo build --verbose --all --no-default-features --features "$FEATURES"
+  - cargo test --verbose --all --no-default-features --features "$FEATURES"
 
 cache:
   - cargo
 
 matrix:
-  include:
+  exclude:
     - rust: stable
-    - rust: nightly
-      script:
-          - cargo build --verbose --features "nightly"
-          - cargo test --verbose --features "nightly"
+      env: FEATURES='all'
